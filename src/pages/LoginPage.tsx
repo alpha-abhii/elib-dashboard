@@ -9,21 +9,43 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { login } from "@/http/api"
+import { useMutation } from "@tanstack/react-query"
 import { useRef } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 
 export default function LoginPage() {
+    const navigate = useNavigate()
 
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+
+    const mutation = useMutation({
+        mutationFn: login,
+        onSuccess: () => {
+            // Invalidate and refetch
+            console.log("Login Successful")
+            navigate('/dashboard/home')
+        },
+    })
 
     const handleLoginSubmit = () => {
         const email = emailRef.current?.value;
         const password = passwordRef.current?.value;
 
-        console.log("data:",email,password)
+        if(!email || !password) {
+            return alert("Please enter email and password");
+        }
+
+        mutation.mutate({email,password})
+
+
+
+        // console.log("data:", email, password)
     }
+
+
 
     return (
         <div className="h-screen w-full flex items-center justify-center">
@@ -53,7 +75,7 @@ export default function LoginPage() {
                         </Link>
                     </div>
                 </CardFooter>
-                
+
             </Card>
         </div>
     )
