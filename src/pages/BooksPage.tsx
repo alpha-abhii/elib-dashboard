@@ -49,8 +49,9 @@ import { Link } from "react-router-dom"
 const BooksPage = () => {
 
     //TODO: Add loadng status and error
+    // , isLoading, isError
 
-    const { data, isLoading, isError } = useQuery({
+    const { data } = useQuery({
         queryKey: ['books'],
         queryFn: getbooks,
         staleTime: 10000
